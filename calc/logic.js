@@ -7,14 +7,14 @@ var lastResult = null
 var lastOp = null
 var clearOnNextInput = true
 var haveComma = false
-var haveMem = false
+var mem = null
 
 function reset() {
 	lastResult = null
 	lastOp = null
 	clearOnNextInput = true
 	haveComma = false
-	haveMem = false
+	mem = null
 	document.getElementById('number_field').value = '0'
 	document.getElementById('M_span').innertHTML = ''
 }
@@ -115,6 +115,68 @@ function mul() {
 	lastResult = document.getElementById('number_field').value
 	clearOnNextInput = true
 }
+function do_sqrt() {
+	lastOp = null
+	var t = document.getElementById('number_field')
+	clearOnNextInput = true
+	lastResult = Math.sqrt(t.value)
+	t.value = lastResult
+}
+function sign() {
+	var t = document.getElementById('number_field')
+	var val = new Number(t.value)
+	t.value = -val
+}
+
+function clearEverything() {
+	var oldMem = mem
+	reset()
+	mem = oldMem
+	if(mem != null) {
+		document.getElementById('M_span').innerHTML = 'M'
+	}
+}
+function clear() {
+	clearOnNextInput = true
+	haveComma = false
+	document.getElementById('number_field').value = '0'
+}
+
+function memStore() {
+	mem = new Number(document.getElementById('number_field').value)
+	document.getElementById('M_span').innerHTML = 'M'
+	clearOnNextInput = true
+}
+
+function memRecall() {
+	if(mem != null) {
+		document.getElementById('number_field').value = mem
+		clearOnNextInput = false
+	}
+}
+
+function memClear() {
+	mem = null
+	document.getElementById('M_span').innerHTML = ''
+}
+
+function memAdd() {
+	if(mem == null) {
+		memStore()
+	} else {
+		mem += new Number(document.getElementById('number_field').value)
+	}
+}
+
+function percent() {
+	if(lastResult != null) {
+		var t = document.getElementById('number_field')
+		var left = new Number(t.value)
+		var right = new Number(lastResult)
+		var val =  left * right / 100.0
+		t.value = val
+	}
+}
 
 function press(what) {
 	switch(what) {
@@ -177,6 +239,9 @@ function press(what) {
 			break
 		case '%':
 			percent()
+			break
+		case '+/-':
+			sign()
 			break
 	}
 }
