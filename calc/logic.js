@@ -16,7 +16,7 @@ function reset() {
 	haveComma = false
 	mem = null
 	document.getElementById('number_field').value = '0'
-	document.getElementById('M_span').innertHTML = ''
+	document.getElementById('M_span').innerHTML = ''
 }
 
 function inputInTextField(what) {
