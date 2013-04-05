@@ -1,7 +1,7 @@
 // file: logic.js
 // author: Vlad Mesco
 // date: 05/04/2013 15:05
-// description: style sheet for calculator
+// description: calculator functions
 
 var lastResult = null 
 var lastOp = null
