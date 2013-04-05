@@ -59,18 +59,59 @@ function bs() {
 	}
 }
 
+function executeOp(what) {
+	var t = document.getElementById('number_field')
+	var cur = t.value
+	if(lastResult == null) {
+		lastResult = cur
+	}
+
+	var left = new Number(lastResult)
+	var right = new Number(cur)
+
+	switch(what) {
+		case '+':
+			t.value = left + right
+			break
+		case '-':
+			t.value = left - right
+			break
+		case '/':
+			t.value = left / right
+			break
+		case '*':
+			t.value = left * right
+			break
+	}
+}
+
 function equals() {
 	if(lastOp != null) {
 		executeOp(lastOp)
 	}
-	lastResult = null
-	lastOp = null
+	//lastResult = null
+	//lastOp = null
 	clearOnNextInput = true
 	haveComma = false
 }
 
 function minus() {
 	lastOp = '-'
+	lastResult = document.getElementById('number_field').value
+	clearOnNextInput = true
+}
+function plus() {
+	lastOp = '+'
+	lastResult = document.getElementById('number_field').value
+	clearOnNextInput = true
+}
+function div() {
+	lastOp = '/'
+	lastResult = document.getElementById('number_field').value
+	clearOnNextInput = true
+}
+function mul() {
+	lastOp = '*'
 	lastResult = document.getElementById('number_field').value
 	clearOnNextInput = true
 }
