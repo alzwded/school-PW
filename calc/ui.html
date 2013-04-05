@@ -20,56 +20,56 @@ description: ui
 	<table id="frame" class="frame">
 		<tr>
 			<td colspan="2" style="padding:10px;">
-				<input type="text" id="number_field" readonly="readonly" />
+				<input type="text" id="number_field" readonly="readonly" title="Your number"/>
 			</td>
 		</tr>
 		<tr>
 			<td><table>
 				<tr><td><span id="M_span" />
-				<tr><td><input type="button" class="memoryButton" value="MC" onclick="press('mc')"/>
-				<tr><td><input type="button" class="memoryButton" value="MR" onclick="press('mr')"/>
-				<tr><td><input type="button" class="memoryButton" value="MS" onclick="press('ms')"/>
-				<tr><td><input type="button" class="memoryButton" value="M+" onclick="press('m+')"/>
+				<tr><td><input type="button" class="memoryButton" value="MC" onclick="press('mc')" title="Memory Clear"/>
+				<tr><td><input type="button" class="memoryButton" value="MR" onclick="press('mr')" title="Memory Recall"/>
+				<tr><td><input type="button" class="memoryButton" value="MS" onclick="press('ms')" title="Memory Store"/>
+				<tr><td><input type="button" class="memoryButton" value="M+" onclick="press('m+')" title="Memory Add"/>
 			</table></td>
 			<td><table><tr><td>
-				<input type="button" class="clearButtons" value="Backspace" onclick="press('bs')"/>
-				<input type="button" class="clearButtons" value="CE" onclick="press('ce')"/>
-				<input type="button" class="clearButtons" value="C" onclick="press('c')"/>
+				<input type="button" class="clearButtons" value="Backspace" onclick="press('bs')" title="Backspace"/>
+				<input type="button" class="clearButtons" value="CE" onclick="press('ce')" title="Clear everything"/>
+				<input type="button" class="clearButtons" value="C" onclick="press('c')" title="Clear"/>
 			</td></tr>
 			<tr><td>
 				<table>
 					<tr>
-						<td><input type="button" class="regularButton" value="7" onclick="press('7')"/></td>
-						<td><input type="button" class="regularButton" value="8" onclick="press('8')"/></td>
-						<td><input type="button" class="regularButton" value="9" onclick="press('9')"/></td>
-						<td><input type="button" class="regularButton" value="/" onclick="press('/')"/></td>
-						<td><input type="button" class="memoryButton" value="sqrt" onclick="press('sqrt')"/></td>
+						<td><input type="button" class="regularButton" value="7" onclick="press('7')" title="7"/></td>
+						<td><input type="button" class="regularButton" value="8" onclick="press('8')" title="8"/></td>
+						<td><input type="button" class="regularButton" value="9" onclick="press('9')" title="9"/></td>
+						<td><input type="button" class="regularButton" value="/" onclick="press('/')" title="division"/></td>
+						<td><input type="button" class="memoryButton" value="sqrt" onclick="press('sqrt')" title="square root"/></td>
 					</tr>
 					<tr>
-						<td><input type="button" class="regularButton" value="4" onclick="press('4')"/></td>
-						<td><input type="button" class="regularButton" value="5" onclick="press('5')"/></td>
-						<td><input type="button" class="regularButton" value="6" onclick="press('6')"/></td>
-						<td><input type="button" class="regularButton" value="*" onclick="press('*')"/></td>
-						<td><input type="button" class="memoryButton" value="%" onclick="press('%')"/></td>
+						<td><input type="button" class="regularButton" value="4" onclick="press('4')" title="4"/></td>
+						<td><input type="button" class="regularButton" value="5" onclick="press('5')" title="5"/></td>
+						<td><input type="button" class="regularButton" value="6" onclick="press('6')" title="6"/></td>
+						<td><input type="button" class="regularButton" value="*" onclick="press('*')" title="multiply"/></td>
+						<td><input type="button" class="memoryButton" value="%" onclick="press('%')" title="percentage"/></td>
 					</tr>
 					<tr>
-						<td><input type="button" class="regularButton" value="1" onclick="press('1')"/></td>
-						<td><input type="button" class="regularButton" value="2" onclick="press('2')"/></td>
-						<td><input type="button" class="regularButton" value="3" onclick="press('3')"/></td>
-						<td><input type="button" class="regularButton" value="-" onclick="press('-')"/></td>
-						<td><input type="button" class="memoryButton" value="1/x" onclick="press('1/x')"/></td>
+						<td><input type="button" class="regularButton" value="1" onclick="press('1')" title="1"/></td>
+						<td><input type="button" class="regularButton" value="2" onclick="press('2')" title="2"/></td>
+						<td><input type="button" class="regularButton" value="3" onclick="press('3')" title="3"/></td>
+						<td><input type="button" class="regularButton" value="-" onclick="press('-')" title="minus"/></td>
+						<td><input type="button" class="memoryButton" value="1/x" onclick="press('1/x')" title="invert"/></td>
 					</tr>
 					<tr>
-						<td><input type="button" class="regularButton" value="0" onclick="press('0')"/></td>
-						<td><input type="button" class="regularButton" value="+/-" onclick="press('+/-')"/></td>
-						<td><input type="button" class="regularButton" value="." onclick="press('.')"/></td>
-						<td><input type="button" class="regularButton" value="+" onclick="press('+')"/></td>
-						<td><input type="button" class="regularButton" value="=" onclick="press('=')"/></td>
+						<td><input type="button" class="regularButton" value="0" onclick="press('0')" title="0"/></td>
+						<td><input type="button" class="regularButton" value="+/-" onclick="press('+/-')" title="negate"/></td>
+						<td><input type="button" class="regularButton" value="." onclick="press('.')" title="comma"/></td>
+						<td><input type="button" class="regularButton" value="+" onclick="press('+')" title="sum"/></td>
+						<td><input type="button" class="regularButton" value="=" onclick="press('=')" title="compute result"/></td>
 					</tr>
 				</table>
 			</tr></td></table></td>
 		</tr>
 	</table>
-	<br /><br /><input type="button" value="Panic button" onclick="reset()" />
+	<br /><br /><input type="button" value="Panic button" title="Fully reset state" onclick="reset()" />
 	</body>
 </html>
