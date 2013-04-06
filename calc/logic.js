@@ -3,14 +3,14 @@
 // date: 05/04/2013 15:05
 // description: calculator functions
 
-var lastResult = null 
+var lastResult = "0" 
 var lastOp = null
 var clearOnNextInput = true
 var haveComma = false
 var mem = null
 
 function reset() {
-	lastResult = null
+	lastResult = "0"
 	lastOp = null
 	clearOnNextInput = true
 	haveComma = false
@@ -62,9 +62,6 @@ function bs() {
 function executeOp(what) {
 	var t = document.getElementById('number_field')
 	var cur = t.value
-	if(lastResult == null) {
-		lastResult = cur
-	}
 
 	var left = new Number(lastResult)
 	var right = new Number(cur)
@@ -93,26 +90,12 @@ function equals() {
 	haveComma = false
 }
 
-function minus() {
-	lastOp = '-'
+function doMath(what) {
+	lastOp = what
 	lastResult = document.getElementById('number_field').value
 	clearOnNextInput = true
 }
-function plus() {
-	lastOp = '+'
-	lastResult = document.getElementById('number_field').value
-	clearOnNextInput = true
-}
-function div() {
-	lastOp = '/'
-	lastResult = document.getElementById('number_field').value
-	clearOnNextInput = true
-}
-function mul() {
-	lastOp = '*'
-	lastResult = document.getElementById('number_field').value
-	clearOnNextInput = true
-}
+
 function do_sqrt() {
 	lastOp = null
 	var t = document.getElementById('number_field')
@@ -120,6 +103,7 @@ function do_sqrt() {
 	lastResult = Math.sqrt(t.value)
 	t.value = lastResult
 }
+
 function sign() {
 	var t = document.getElementById('number_field')
 	var val = new Number(t.value)
@@ -134,6 +118,7 @@ function clearEverything() {
 		document.getElementById('M_span').innerHTML = 'M'
 	}
 }
+
 function clear() {
 	clearOnNextInput = true
 	haveComma = false
@@ -171,8 +156,7 @@ function percent() {
 		var t = document.getElementById('number_field')
 		var left = new Number(t.value)
 		var right = new Number(lastResult)
-		var val =  left * right / 100.0
-		t.value = val
+		t.value = left * right / 100.0
 	}
 }
 
@@ -200,16 +184,10 @@ function press(what) {
 			equals()
 			break
 		case '-':
-			minus()
-			break
 		case '+':
-			plus()
-			break
 		case '/':
-			div()
-			break
 		case '*':
-			mul()
+			doMath(what)
 			break
 		case 'sqrt':	
 			do_sqrt()
