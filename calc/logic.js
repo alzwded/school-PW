@@ -148,6 +148,7 @@ function memAdd() {
 		memStore()
 	} else {
 		mem += new Number(document.getElementById('number_field').value)
+		clearOnNextInput = true
 	}
 }
 
