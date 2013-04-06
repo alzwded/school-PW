@@ -89,8 +89,6 @@ function equals() {
 	if(lastOp != null) {
 		executeOp(lastOp)
 	}
-	//lastResult = null
-	//lastOp = null
 	clearOnNextInput = true
 	haveComma = false
 }
