@@ -134,7 +134,7 @@ function memStore() {
 function memRecall() {
 	if(mem != null) {
 		document.getElementById('number_field').value = mem
-		clearOnNextInput = false
+		clearOnNextInput = true
 	}
 }
 
