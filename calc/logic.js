@@ -3,7 +3,7 @@
 // date: 05/04/2013 15:05
 // description: calculator functions
 
-var lastResult = "0" 
+var lastResult = "0"
 var lastOp = null
 var clearOnNextInput = true
 var haveComma = false
@@ -91,7 +91,6 @@ function equals() {
 }
 
 function doMath(what) {
-	equals()
 	lastOp = what
 	lastResult = document.getElementById('number_field').value
 	clearOnNextInput = true
