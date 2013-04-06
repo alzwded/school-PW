@@ -91,6 +91,7 @@ function equals() {
 }
 
 function doMath(what) {
+	equals()
 	lastOp = what
 	lastResult = document.getElementById('number_field').value
 	clearOnNextInput = true
