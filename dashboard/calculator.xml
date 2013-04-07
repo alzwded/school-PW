@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<app>
+	<css>../calc/style.css</css>
+	<css>../calc/style.css</css>
+	<script>
+		<path>../calc/logic.js</path>
+		<onload>reset()</onload>
+	</script>
+	<content>../calc/ui.html</content>
+</app>
