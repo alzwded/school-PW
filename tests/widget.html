@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 <style>
@@ -17,7 +18,13 @@
 		width:100%;
 		background-color:blue;
 		height: 20px;
+		color:#EEE;
+		text-align:center;
+		cursor:default;
+	}
+	.title:hover, .titleClicked {
 		color:white;
+		background-color:#48F;
 	}
 	.closeButton, .moveButton {
 		text-align:center;
@@ -33,31 +40,15 @@
 		float:right;
 	}
 	.closeButton:hover {
-		background-color:cyan;
-	}
-	.moveButton:hover {
-		background-color:cyan;
-	}
-	.moveButtonClicked {
 		background-color:red;
-	}
-	.overlay {
-		width:100%;
-		height:100%;
-		position:absolute;
-		left:0px;
-		top:0px;
-		visibility:hidden;
-		z-index:-999;
 	}
 </style>
 </head>
 <body onmousemove="mouseMove(event)">
 	<div id="win1" class="widget" style="left:100px; top:100px;">
-		<span class="title">
+		<span class="title" id="titleBar" onclick="move(event)">
 			widget
-			<span class="closeButton">-</span>
-			<span id="mb" class="moveButton" onclick="move(event)">m</span>
+			<span class="closeButton" onclick="closeWindow()">-</span>
 		</span>
 		window contentlol
 	</div>
@@ -65,16 +56,23 @@
 var moving = false
 var initialX = 0
 var initialY = 0
+function closeWindow() {
+	var d = document.getElementById("win1")
+	d.parentNode.removeChild(d)
+}
 function move(e) {
 	var d = document.getElementById("win1")
+	var titleBar = document.getElementById("titleBar")
 	if(!moving) {
-		document.getElementById("mb").style.className = "moveButtonClicked"
 		moving = true
 		initialX = e.pageX
 		initialY = e.pageY
+
+		titleBar.classList.add("titleClicked")
 	} else {
 		moving = false
-		document.getElementById("mb").style.className = "moveButton"
+
+		titleBar.classList.remove("titleClicked")
 	}
 }
 function mouseMove(e) {
@@ -85,10 +83,10 @@ function mouseMove(e) {
 		var dy = y - initialY
 
 		var d = document.getElementById("win1")
-		var left = new Number(d.style.getPropertyValue("left").replace("px", ""))
+		var left = new Number(d.style.left.replace("px", ""))
 		left += dx
 		d.style.left = left + "px"
-		var top = new Number(d.style.getPropertyValue("top").replace("px", ""))
+		var top = new Number(d.style.top.replace("px", ""))
 		top += dy
 		d.style.top = top + "px"
 
