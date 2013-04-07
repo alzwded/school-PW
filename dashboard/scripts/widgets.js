@@ -8,13 +8,46 @@ var movingWidget = null
 var initialX = 0
 var initialY = 0
 
-function new_widget(path) {
+function raiseMe(w) {
+	var container = document.getElementById('content')
+	for(i = 0 ; i < container.children.length ; ++i) {
+		container.children[i].style.zIndex = 10
+	}
+	w.style.zIndex = 1000
+}
+
+function raiseMeCb(e) {
+	var d = e.target || e.srcElement
+	raiseMe(d.parentElement)
+}
+
+function new_widget(what) {
 	var uniqueName = "__Widget" + lastWidget++
 	// request widget.php
-	var widget = null
-	// inject widget in document
+	var widgetReq = new XMLHttpRequest()
+	var params = "?id=" + uniqueName + "&title=" + what
+	widgetReq.open("GET", "widget.php" + params, false)
+	widgetReq.send()
+
+	var widget = document.createElement("div")
+	widget.name = uniqueName
+	widget.id = uniqueName
+	widget.style.left = "100px"
+	widget.style.top = "100px"
+	widget.classList.add("widget")
+	widget.onclick = raiseMeCb
+	widget.innerHTML = widgetReq.responseText
+	document.getElementById('content').appendChild(widget)
+	raiseMe(widget)
+
 	// request path.php
-	// inject app in widget
+
+	var appReq = new XMLHttpRequest()
+	appReq.open("GET", what + ".php", false)
+	appReq.send()
+
+	document.getElementById(uniqueName + "_content").innerHTML = appReq.responseText
+
 	return widget
 }
 
@@ -22,7 +55,7 @@ function move(e) {
 	var source = e.target || e.srcElement
 	var d = source.parentElement
 	var titleBar = document.getElementById(d.name + "_titleBar")
-	if(!moving) {
+	if(movingWidget == null) {
 		movingWidget = d
 		initialX = e.pageX
 		initialY = e.pageY
@@ -53,4 +86,10 @@ function mouseMove(e) {
 
 	initialX = x
 	initialY = y
+}
+
+function closeWindow(e) {
+	var source = e.target || e.srcElement
+	var d = source.parentElement.parentElement
+	d.parentNode.removeChild(d)
 }
