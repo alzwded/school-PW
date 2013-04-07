@@ -1,0 +1,18 @@
+/*
+file: widgets.js
+author: Vlad Mesco
+date: 07/04/2013 13:46
+description: landing page stylesheet
+*/
+body, html {
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+	background-color: #44E;
+}
+
+.launcher {
+	color:#44E;
+	text-decoration:underline;
+	cursor:pointer;
+}
