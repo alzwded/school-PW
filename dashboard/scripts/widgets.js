@@ -10,10 +10,11 @@ var initialY = 0
 
 var cssMap = {}
 var scriptMap = {}
+var instanceMap = {}
 
 function raiseMe(w) {
 	var container = document.getElementById('content')
-	for(i = 0 ; i < container.children.length ; ++i) {
+	for(var i = 0 ; i < container.children.length ; ++i) {
 		container.children[i].style.zIndex = 10
 	}
 	w.style.zIndex = 1000
@@ -24,30 +25,36 @@ function raiseMeCb(e) {
 	raiseMe(d.parentElement)
 }
 
-function loadCSSes(csses) {
-	for(i = 0 ; i < csses.length ; ++i) {
+function loadCSSes(csses, iInstance) {
+	for(var i = 0 ; i < csses.length ; ++i) {
 		var me = csses[i].childNodes
-		for(j = 0 ; j < me.length ; ++j) {
+		for(var j = 0 ; j < me.length ; ++j) {
 			var href = me[j].nodeValue
+			iInstance.csses.push(href)
 			if(cssMap[href] == null) {
 				var css = document.createElement('link')
+				var node = new Object
+				node.css = css
 				css.async = false
 				css.setAttribute('rel', 'stylesheet')
 				css.setAttribute('type', 'text/css')
 				css.setAttribute('href', href)
-				cssMap[href] = css
+				node.rc = 1
+				cssMap[href] = node
 				document.getElementsByTagName('head')[0].appendChild(css)
+			} else {
+				cssMap[href].rc++
 			}
 		}
 	}
 }
 
-function loadScripts(scripts, oExecutes) {
-	for(i = 0 ; i < scripts.length ; ++i) {
+function loadScripts(scripts, iInstance) {
+	for(var i = 0 ; i < scripts.length ; ++i) {
 		var href = null
 		var executeCode = null
 		var unloadCode = null
-		for(j = 0 ; j < scripts[i].childNodes.length ; ++j) {
+		for(var j = 0 ; j < scripts[i].childNodes.length ; ++j) {
 			if(scripts[i].childNodes[j].tagName == "path") {
 				href = scripts[i].childNodes[j].childNodes[0].nodeValue
 			} else if(scripts[i].childNodes[j].tagName == "onload") {
@@ -56,6 +63,8 @@ function loadScripts(scripts, oExecutes) {
 				unloadCode = scripts[i].childNodes[j].childNodes[0].nodeValue
 			}
 		}
+		iInstance.destructors.push(unloadCode)
+		iInstance.scripts.push(href)
 		if(scriptMap[href] == null) {
 			var script = document.createElement('script')
 			script.async = false
@@ -65,17 +74,28 @@ function loadScripts(scripts, oExecutes) {
 				script.onload = function() { eval(executeCode) }
 			}
 			var node = new Object()
-			node.scriptObject = script
+			node.script = script
 			node.onload = function() { eval(executeCode) }
 			node.unload = function() { eval(unloadCode) }
+			node.rc = 1
 			scriptMap[href] = node
 			document.getElementsByTagName('head')[0].appendChild(script)
 		} else {
 			/*var node = scriptMap[href]
 			node.onload()*/
-			oExecutes.push(executeCode)
+			scriptMap[href].rc++
+			iInstance.constructors.push(executeCode)
 		}
 	}
+}
+
+function new_instance() {
+	var instance = new Object
+	instance.csses = new Array()
+	instance.scripts = new Array()
+	instance.constructors = new Array()
+	instance.destructors = new Array()
+	return instance
 }
 
 function new_widget(what, title) {
@@ -85,6 +105,9 @@ function new_widget(what, title) {
 	var params = "?id=" + uniqueName + "&title=" + title
 	widgetReq.open("GET", "widget.php" + params, false)
 	widgetReq.send()
+
+	var instance = new_instance()
+	instanceMap[uniqueName] = instance
 
 	var widget = document.createElement("div")
 	widget.name = uniqueName
@@ -105,10 +128,10 @@ function new_widget(what, title) {
 
 	if(appReq.status == 200) {
 		var csses = appReq.responseXML.getElementsByTagName('css')
-		loadCSSes(csses)
+		loadCSSes(csses, instance)
 		var scripts = appReq.responseXML.getElementsByTagName('script')
 		var executes = new Array()
-		loadScripts(scripts, executes)
+		loadScripts(scripts, instance)
 
 		var contentReq = new XMLHttpRequest()
 		contentReq.open("GET", appReq.responseXML.getElementsByTagName('content')[0].childNodes[0].nodeValue, false)
@@ -118,8 +141,8 @@ function new_widget(what, title) {
 		contentSpan = document.getElementById(uniqueName + "_content")
 		contentSpan.innerHTML = content
 
-		for(var i = 0 ; i < executes.length ; ++i) {
-			eval(executes[i])
+		for(var i = 0 ; i < instance.constructors.length ; ++i) {
+			eval(instance.constructors[i])
 		}
 
 	}
@@ -168,5 +191,30 @@ function mouseMove(e) {
 function closeWindow(e) {
 	var source = e.target || e.srcElement
 	var d = source.parentElement.parentElement
+
+	var nameId = d.name
+	var instance = instanceMap[nameId]
+	for(var i = 0 ; i < instance.destructors.length ; ++i) {
+		eval(instance.destructors[i])
+	}
+	for(var i = 0 ; i < instance.scripts.length ; ++i) {
+		var href = instance.scripts[i]
+		var node = scriptMap[href]
+		if(--node.rc < 1) {
+			var domElement = node.script
+			delete scriptMap[href]
+			domElement.parentElement.removeChild(domElement)
+		}
+	}
+	for(var i = 0 ; i < instance.csses.length ; ++i) {
+		var href = instance.csses[i]
+		var node = cssMap[href]
+		if(--node.rc < 1) {
+			var domElement = node.css
+			delete cssMap[href]
+			domElement.parentElement.removeChild(domElement)
+		}
+	}
+	
 	d.parentNode.removeChild(d)
 }
