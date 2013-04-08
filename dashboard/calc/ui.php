@@ -1,4 +1,10 @@
 <?php
+/*
+file: ui.php
+author: Vlad Mesco
+date: 08/04/2013 18:32
+description: calculator widget UI
+*/
 header('Content-Type: text/html');
 $id = $_GET["id"];
 echo <<<EOT

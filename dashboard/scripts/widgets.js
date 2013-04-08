@@ -1,7 +1,7 @@
 // file: widgets.js
 // author: Vlad Mesco
 // date: 07/04/2013 13:46
-// description: widget factory
+// description: widget factory & methods
 
 var lastWidget = 0
 var movingWidget = null

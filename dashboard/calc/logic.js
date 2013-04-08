@@ -1,6 +1,6 @@
 // file: logic.js
 // author: Vlad Mesco
-// date: 05/04/2013 15:05
+// date: 08/04/2013 18:32
 // description: calculator functions
 
 var ctx = new Object()

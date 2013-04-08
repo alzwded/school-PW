@@ -1,4 +1,10 @@
 <?php
+/*
+file: calculator.xml.php
+author: Vlad Mesco
+date: 08/04/2013 18:30
+description: calculator widget definition
+*/
 header('Content-Type: text/xml');
 $id = $_GET["id"];
 echo <<<EOT
