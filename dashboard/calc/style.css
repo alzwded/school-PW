@@ -1,0 +1,49 @@
+/*
+file: style.css
+author: Vlad Mesco
+date: 05/04/2013 15:05
+description: style sheet for calculator
+*/
+
+.number_field {
+	width:95%;
+	margin:3px;
+	padding:3px;
+	text-align: right;
+}
+
+.regularButton, .clearButtons, .memoryButton {
+	background-color:#C0C0C0;
+	color:blue;
+	margin: 3px 3px 3px 3px;
+}
+
+.regularButton, .memoryButton {
+	width:50px;
+	height:40px;
+}
+
+.clearButtons {
+	width:90px;
+	height:40px;
+}
+
+.memoryButton, .clearButtons {
+	color:red;
+}
+
+.frame {
+	background-color:#C0C0C0;
+}
+
+.M_span {
+	width:40px;
+	height:30px;
+	margin-left:5px;
+	margin-right:5px;
+	margin-top:8px;
+	margin-bottom:8px;
+	border: inset 2px;
+	background-color:#C0C0C0;
+	display: block;
+}

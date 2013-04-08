@@ -42,21 +42,39 @@ function loadCSSes(csses) {
 	}
 }
 
-function loadScripts(scripts) {
+function loadScripts(scripts, oExecutes) {
 	for(i = 0 ; i < scripts.length ; ++i) {
-			var href = scripts[i].childNodes[1].childNodes[0].nodeValue
-			var executeCode = scripts[i].childNodes[3].childNodes[0].nodeValue
-			if(scriptMap[href] == null) {
-				var script = document.createElement('script')
-				script.async = false
-				script.setAttribute('type', 'text/javascript')
-				script.setAttribute('src', href)
-				if(executeCode != null) {
-					script.onload = function() { eval(executeCode) }
-				}
-				scriptMap[href] = script
-				document.getElementsByTagName('head')[0].appendChild(script)
+		var href = null
+		var executeCode = null
+		var unloadCode = null
+		for(j = 0 ; j < scripts[i].childNodes.length ; ++j) {
+			if(scripts[i].childNodes[j].tagName == "path") {
+				href = scripts[i].childNodes[j].childNodes[0].nodeValue
+			} else if(scripts[i].childNodes[j].tagName == "onload") {
+				executeCode = scripts[i].childNodes[j].childNodes[0].nodeValue
+			} else if(scripts[i].childNodes[j].tagName == "unload") {
+				unloadCode = scripts[i].childNodes[j].childNodes[0].nodeValue
 			}
+		}
+		if(scriptMap[href] == null) {
+			var script = document.createElement('script')
+			script.async = false
+			script.setAttribute('type', 'text/javascript')
+			script.setAttribute('src', href)
+			if(executeCode != null) {
+				script.onload = function() { eval(executeCode) }
+			}
+			var node = new Object()
+			node.scriptObject = script
+			node.onload = function() { eval(executeCode) }
+			node.unload = function() { eval(unloadCode) }
+			scriptMap[href] = node
+			document.getElementsByTagName('head')[0].appendChild(script)
+		} else {
+			/*var node = scriptMap[href]
+			node.onload()*/
+			oExecutes.push(executeCode)
+		}
 	}
 }
 
@@ -82,14 +100,15 @@ function new_widget(what, title) {
 	// request path.php
 
 	var appReq = new XMLHttpRequest()
-	appReq.open("GET", what, false)
+	appReq.open("GET", what + "?id=" + uniqueName, false)
 	appReq.send()
 
 	if(appReq.status == 200) {
 		var csses = appReq.responseXML.getElementsByTagName('css')
 		loadCSSes(csses)
 		var scripts = appReq.responseXML.getElementsByTagName('script')
-		loadScripts(scripts)
+		var executes = new Array()
+		loadScripts(scripts, executes)
 
 		var contentReq = new XMLHttpRequest()
 		contentReq.open("GET", appReq.responseXML.getElementsByTagName('content')[0].childNodes[0].nodeValue, false)
@@ -98,6 +117,10 @@ function new_widget(what, title) {
 
 		contentSpan = document.getElementById(uniqueName + "_content")
 		contentSpan.innerHTML = content
+
+		for(var i = 0 ; i < executes.length ; ++i) {
+			eval(executes[i])
+		}
 
 	}
 
