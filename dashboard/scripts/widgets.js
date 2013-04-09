@@ -120,7 +120,7 @@ function new_widget(what, title) {
 	widget.name = uniqueName
 	widget.id = uniqueName
     var loffset = 0
-    if(document.body.clientWidth/2 > 100) {
+    if(document.body.clientWidth / 2 > 100) {
         loffset = 100
     }
 	widget.style.left = new String(Math.random() * document.body.clientWidth / 2 + loffset) + "px"
