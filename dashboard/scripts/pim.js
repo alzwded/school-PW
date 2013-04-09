@@ -170,6 +170,7 @@ function pim_fireChanged() {
 	for(var i = 0 ; i < pim_callbacks.length ; ++i) {
 		pim_callbacks[i]()
 	}
+	pim_toCookie()
 }
 
 function pim_registerChangeCallback(f) {
