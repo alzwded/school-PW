@@ -8,6 +8,7 @@ var pim_uniqueId = 0
 
 var pim_byDateCache = {}
 var pim_callbacks = new Array()
+var pim_cacheValid = false
 
 function serialize() {
 	var ret = new String()
@@ -86,9 +87,14 @@ function pim_rebuildDateCache() {
 	}
 }
 
-function new_pimEntry(date, text, expires) {
+function new_pimEntryWithId(id, date, text, expires) {
+	var iid = new Number(id)
+	if(pim_uniqueId < iid) {
+		pim_uniqueId = iid + 1
+	}
+
 	var ret = new Object()
-	ret.id = "" + (pim_uniqueId++)
+	ret.id = "" + id
 	if(!(date instanceof Date)) {
 		throw new IllegalArgumentException()
 	}
@@ -97,10 +103,38 @@ function new_pimEntry(date, text, expires) {
 		throw new IllegalArgumentException()
 	}
 	ret.text = text
-	if(expires != null && !(expires instanceof String)) {
+	if(expires != null && (!(expires instanceof Date) || expires < date)) {
 		throw new IllegalArgumentException()
 	}
 	ret.expires = expires
+
+	ret.setDate = function(d) {
+		if(!(d instanceof Date)) {
+			throw new IllegalArgumentException()
+		}
+		this.date = d
+		pim_fireChanged()
+	}
+	ret.setText = function(x) {
+		if(!(x instanceof String)) {
+			throw new IllegalArgumentException()
+		}
+		this.text = x
+		pim_fireChanged()
+	}
+	ret.setExpires = function(d) {
+		if(d != null && (!(d instanceof Date) || d >= this.date)) {
+			throw new IllegalArgumentException()
+		}
+		this.expires = d
+		pim_fireChanged()
+	}
+
+	return ret
+}
+
+function new_pimEntry(date, text, expires) {
+	var ret = new_pimEntryWithId(pim_uniqueId, date, text, expires)
 	return ret
 }
 
@@ -108,22 +142,29 @@ function new_pimEntry(date, text, expires) {
 function pim_add(date, text, expires) {
 	var e = new_pimEntry(date, text, expires)
 	pim_data.push(e)
-	pim_rebuildDateCache()
+	pim_fireChanged()
 	return e.id
 }
 
 function pim_getEntriesForDate(date) {
+	if(!pim_cacheValid) {
+		pim_rebuildDateCache()
+	}
+	return pim_byDateCache[pim_getDateId(date)]
 }
 
 function pim_delete(id) {
 	for(var i = 0 ; i < pim_data.length ; ++i) {
 		if(pim_data[i].id == id) {
 			pim_data.splice(i, 1)
+			pim_fireChanged()
+			break
 		}
 	}
 }
 
 function pim_fireChanged() {
+	pim_cacheValid = false
 	for(var i = 0 ; i < pim_callbacks.length ; ++i) {
 		pim_callbacks[i]()
 	}
@@ -140,3 +181,5 @@ function pim_unregisterChangeCallback(f) {
 		}
 	}
 }
+
+pim_fromCookie()
