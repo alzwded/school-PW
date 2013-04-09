@@ -11,8 +11,10 @@ description: main landing page
 	<link type="text/css" rel="stylesheet" href="css/style.css" />
 	<link type="text/css" rel="stylesheet" href="css/widget.css" />
 	<script type="text/javascript" src="scripts/widgets.js"></script>
+	<script type="text/javascript" src="scripts/debug.js"></script>
 </head>
-<body onmousemove="mouseMove(event)">
+<body onmousemove="mouseMove(event)" onload="loadDebug()">
+	<div style="position:absolute; top:0%; width: 400px; height:100px; overflow:scroll; background-color:black; color:lime; font-family: monospace; visibility:hidden;" title="debug window" id="debug"></div>
 	<span id="content"></span>
 	<div style="position:absolute; top:40%; width: 160px; border:solid black 2px; background-color:#BB4;">
 		<ul>

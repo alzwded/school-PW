@@ -12,12 +12,19 @@ var cssMap = {}
 var scriptMap = {}
 var instanceMap = {}
 
-function raiseMe(w) {
+function raiseMe(src) {
 	var container = document.getElementById('content')
 	for(var i = 0 ; i < container.children.length ; ++i) {
 		container.children[i].style.zIndex = 10
 	}
-	w.style.zIndex = 1000
+	var w = src
+	// TODO why does /^DIV$/i not match? lol
+	while(w != null && !(w.tagName.toUpperCase() == "DIV" && w.id.indexOf('__Widget') == 0)) {
+		w = w.parentElement
+	}
+	if(w != null) {
+		w.style.zIndex = 1000
+	}
 }
 
 function raiseMeCb(e) {
