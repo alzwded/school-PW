@@ -17,18 +17,20 @@ function serialize() {
 		var element = pim_data[i]
 		s += element.id + '%|'
 		s += element.date.toUTCString() + '%|'
-		s += escape(element.text).replace('%', '%%') + '%|'
+		s += element.text.replace('%', '%%') + '%|'
 		if(element.expires == null) {
 			s += element.expires
 		}
 		s += '%\\'
+        ret += s
 	}
+    return escape(s)
 }
 
 function deserialize(str) {
 	pim_data = {}
 	pim_uniqueId = 0
-	var a = str.split('%\\')
+	var a = unescape(str).split('%\\')
 	for(var i = 0 ; i < a.length ; ++i) {
 		var fields = a[i].split('%|')
 		var entry = new Object()
