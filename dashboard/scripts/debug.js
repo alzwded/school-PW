@@ -31,10 +31,12 @@ function debug_writeln() {
 }
 
 function debug_timestamp() {
+	if(!enableDebugging) { return; }
 	debug_write((new Date()).toUTCString(), ': ')
 }
 
 function debug_timestampln() {
+	if(!enableDebugging) { return; }
 	debug_timestamp()
 	debug_writeln
 }

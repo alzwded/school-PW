@@ -29,7 +29,7 @@ function raiseMe(src) {
 
 function raiseMeCb(e) {
 	var d = e.target || e.srcElement
-	raiseMe(d.parentElement)
+	raiseMe(d)
 }
 
 function loadCSSes(csses, iInstance) {
