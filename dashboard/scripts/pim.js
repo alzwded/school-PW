@@ -26,6 +26,8 @@ function serialize() {
 }
 
 function deserialize(str) {
+	pim_data = {}
+	pim_uniqueId = 0
 	var a = str.split('%\\')
 	for(var i = 0 ; i < a.length ; ++i) {
 		var fields = a[i].split('%|')
