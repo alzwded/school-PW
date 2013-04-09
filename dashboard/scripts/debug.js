@@ -6,8 +6,21 @@
 var enableDebugging = false
 
 function loadDebug() {
-	if(!enableDebugging) { return; }
-	document.getElementById('debug').style.visibility = "visible"
+	if(!enableDebugging) {
+		document.getElementById('debug').style.visibility = "hidden"
+	} else {
+		document.getElementById('debug').style.visibility = "visible"
+	}
+}
+
+function debugOn() {
+	enableDebugging = true
+	loadDebug()
+}
+
+function debugOff() {
+	enableDebugging = false
+	loadDebug()
 }
 
 function debug_purge() {

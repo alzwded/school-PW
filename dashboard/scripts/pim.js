@@ -41,6 +41,14 @@ function deserialize(str) {
 	}
 }
 
+function pim_save() {
+	debug_writeln('pim_save not implemented')
+}
+
+function pim_load() {
+	debug_writeln('pim_load not implemented')
+}
+
 function pim_toCookie() {
 	var theDate = new Date()
 	var oneYearLater = new Date(theDate.getTime() + 31536000000)

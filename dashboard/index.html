@@ -12,6 +12,7 @@ description: main landing page
 	<link type="text/css" rel="stylesheet" href="css/widget.css" />
 	<script type="text/javascript" src="scripts/widgets.js"></script>
 	<script type="text/javascript" src="scripts/debug.js"></script>
+	<script type="text/javascript" src="scripts/pim.js"></script>
 </head>
 <body onmousemove="mouseMove(event)" onload="loadDebug()">
 	<div style="position:absolute; top:0%; width: 400px; height:100px; overflow:scroll; background-color:black; color:lime; font-family: monospace; visibility:hidden;" title="debug window" id="debug"></div>
@@ -24,8 +25,8 @@ description: main landing page
 		</ul>
 	</div>
 	<div style="bottom:0px;position:absolute;border: solid 2px black;background-color:#BB4;color:#44E;">
-		<input type="file" name="data" /><input type="button" value="Load from file" style="float:right;"/><br />
-		<input type="button" value="Save to file" style="float:right"/>
+		<input type="file" name="file_data" id="file_data" /><input type="button" value="Load from file" style="float:right;" onclick="pim_load('file_data')"/><br />
+		<input type="button" value="Save to file" style="float:right" onclick="pim_save()"/>
 	</div>
 </body>
 </html>
