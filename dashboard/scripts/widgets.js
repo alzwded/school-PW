@@ -119,8 +119,12 @@ function new_widget(what, title) {
 	var widget = document.createElement("div")
 	widget.name = uniqueName
 	widget.id = uniqueName
-	widget.style.left = "100px"
-	widget.style.top = "100px"
+    var loffset = 0
+    if(document.body.clientWidth/2 > 100) {
+        loffset = 100
+    }
+	widget.style.left = new String(Math.random() * document.body.clientWidth / 2 + loffset) + "px"
+	widget.style.top = new String(Math.random() * document.body.clientHeight / 2) + "px"
 	widget.className += " widget"
 	widget.onclick = raiseMeCb
 	widget.innerHTML = widgetReq.responseText
