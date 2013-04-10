@@ -24,12 +24,12 @@ echo <<<EOT
     <tr><td><table>
         <tr>
             <td class="calendar_headerButton"></td>
+            <td class="calendar_headerButton">S</td>
             <td class="calendar_headerButton">M</td>
             <td class="calendar_headerButton">T</td>
             <td class="calendar_headerButton">W</td>
             <td class="calendar_headerButton">T</td>
             <td class="calendar_headerButton">F</td>
-            <td class="calendar_headerButton">S</td>
             <td class="calendar_headerButton">S</td>
         </tr>
         <tr>
