@@ -11,14 +11,14 @@ echo <<<EOT
 <table class="calendar_table">
     <tr><td style="display:block;">
         <span style="display:block; float:left;">
-            <span class="calendar_button" onclick="prevMonth(event, $id)">&lt;</span>
+            <span name="$id" class="calendar_button" onclick="prevMonth(event)">&lt;</span>
             <span id="month_$id"></span>
-            <span class="calendar_button" onclick="nextMonth(event, $id)">&gt;</span>
+            <span name="$id" class="calendar_button" onclick="nextMonth(event)">&gt;</span>
         </span>
         <span style="display:block; float:right;">
-            <span class="calendar_button" onclick="prevYear(event, $id)">&lt;</span>
+            <span name="$id" class="calendar_button" onclick="prevYear(event)">&lt;</span>
             <span id="year_$id"></span>
-            <span class="calendar_button" onclick="nextYear(event, $id)">&gt;</span>
+            <span name="$id" class="calendar_button" onclick="nextYear(event)">&gt;</span>
         </span>
     </td></tr>
     <tr><td><table>

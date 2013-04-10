@@ -48,26 +48,18 @@ function calendar_refresh(id) {
     document.getElementById('year_' + id).innerHTML = model[id].year
     var d = new Date(model[id].year, model[id].month, 1, 0, 0, 0, 0)
     var week = 0
-    var switchWeekFunc = null
-    if(d.getDay() == 0) {
-        switchWeekFunc = function() {
-            fillWeek(id, week)
-            switchWeekFunc = function() {
-                fillWeek(id, week)
-                ++week
-            }
-        }
-    } else {
-        switchWeekFunc = function() {
-            fillWeek(id, week)
-            ++week;
-        }
+    var switchWeekFunc = function() {
+        fillWeek(id, week)
+        ++week
     }
     for(var i = 0 ; i < d.getDay() ; ++i) {
         var td = document.getElementById('w0d' + i + '_' + id)
         td.className = "calendar_otherMonthButton"
         var otherDate = new Date(d)
         otherDate = new Date(otherDate.getTime() - (d.getDay() - i) * (1000 * 60 * 60 * 24))
+        while(otherDate.getHours() != 0) {
+            otherDate = new Date(otherDate.getTime() - (1000 * 60 * 60))
+        }
         td.innerHTML = otherDate.getDate() + 1
         td.onclick = null
     }
@@ -78,15 +70,9 @@ function calendar_refresh(id) {
         td.name = id + '%|' + d
         td.onclick = calendar_select
         d = new Date(d.getTime() + (1000 * 60 * 60 * 24))
-        if(d.getDay() == 0) {
-            switchWeekFunc()
+        while(d.getHours() != 0) {
+            d = new Date(d.getTime() + (1000 * 60 * 60))
         }
-    }
-    while(d.getDay() < 6) {
-        var td = document.getElementById('w' + week + 'd' + d.getDay() + '_' + id)
-        td.className = 'calendar_otherMonthButton'
-        td.innerHTML = d.getDate()
-        d = new Date(d.getTime() + (1000 * 60 * 60 * 24))
         if(d.getDay() == 0) {
             switchWeekFunc()
         }
@@ -96,6 +82,9 @@ function calendar_refresh(id) {
         td.className = 'calendar_otherMonthButton'
         td.innerHTML = d.getDate()
         d = new Date(d.getTime() + (1000 * 60 * 60 * 24))
+        while(d.getHours() != 0) {
+            d = new Date(d.getTime() + (1000 * 60 * 60))
+        }
         if(d.getDay() == 0) {
             debug_writeln(week)
             switchWeekFunc()
@@ -103,10 +92,9 @@ function calendar_refresh(id) {
     }
 }
 
-function nextMonth(e, id) {
-    if(!(id instanceof String)) {
-        id = id.id
-    }
+function nextMonth(e) {
+    var src = e.target || e.srcElement
+    var id = src.attributes["name"].nodeValue
     if(model[id].month < 11) {
         model[id].month++
     } else {
@@ -116,10 +104,9 @@ function nextMonth(e, id) {
     calendar_refresh(id)
 }
 
-function prevMonth(e, id) {
-    if(!(id instanceof String)) {
-        id = id.id
-    }
+function prevMonth(e) {
+    var src = e.target || e.srcElement
+    var id = src.attributes["name"].nodeValue
     if(model[id].month > 0) {
         model[id].month--
     } else {
@@ -129,18 +116,16 @@ function prevMonth(e, id) {
     calendar_refresh(id)
 }
 
-function nextYear(e, id) {
-    if(!(id instanceof String)) {
-        id = id.id
-    }
+function nextYear(e) {
+    var src = e.target || e.srcElement
+    var id = src.attributes["name"].nodeValue
     model[id].year++
     calendar_refresh(id)
 }
 
-function prevYear(e, id) {
-    if(!(id instanceof String)) {
-        id = id.id
-    }
+function prevYear(e) {
+    var src = e.target || e.srcElement
+    var id = src.attributes["name"].nodeValue
     model[id].year--
     calendar_refresh(id)
 }
