@@ -62,4 +62,5 @@ description: calendar styles
 
 .calendar_appointmentTextArea {
     overflow: auto;
+    background-color:#C00;
 }

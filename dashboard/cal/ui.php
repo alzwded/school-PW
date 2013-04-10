@@ -94,11 +94,15 @@ echo <<<EOT
         </tr>
     </table></td></tr>
     <tr><td><div style="height:100px; overflow: scroll;"><table id="appointments_$id" class="calendar_appointments">
-        <tr><td><input type="date" class="calendar_appointmentInput /></td><td><textarea class="calendar_appointmentTextArea>Testing testing 1 2 3</textarea></td></tr>
-        <tr><td><input type="date" class="calendar_appointmentInput /></td><td><textarea class="calendar_appointmentTextArea>Testing testing 1 2 3</textarea></td></tr>
-        <tr><td><input type="date" class="calendar_appointmentInput /></td><td><textarea class="calendar_appointmentTextArea>Testing testing 1 2 3</textarea></td></tr>
-        <tr><td><input type="date" class="calendar_appointmentInput /></td><td><textarea class="calendar_appointmentTextArea>Testing testing 1 2 3</textarea></td></tr>
+        <tr><td><input type="button" value="x" /><input type="date" class="calendar_appointmentInput" /></td><td><textarea class="calendar_appointmentTextArea">"Testing testing 1 2 3"</textarea></td></tr>
+        <tr><td><input type="date" class="calendar_appointmentInput" /></td><td><textarea class="calendar_appointmentTextArea">"Testing testing 1 2 3"</textarea></td></tr>
+        <tr><td><input type="date" class="calendar_appointmentInput" /></td><td><textarea class="calendar_appointmentTextArea">"Testing testing 1 2 3"</textarea></td></tr>
+        <tr><td><input type="date" class="calendar_appointmentInput" /></td><td><textarea class="calendar_appointmentTextArea">"Testing testing 1 2 3"</textarea></td></tr>
     </div></table></td></tr>
+    <tr><td>
+        <input style="display:block; float:right;" type="button" id="add_$id" onclick="calendar_add(event)" value="Add" />
+        <input style="display:block; float:right;" type="button" id="clear_$id" onclick="calendar_clearEverything(event)" value="Clear" />
+    </td></tr>
 </table>
 EOT;
 ?>
