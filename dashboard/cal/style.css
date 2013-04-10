@@ -22,7 +22,7 @@ description: calendar styles
 
 .calendar_thisMonthButton, .calendar_otherMonthButton, .calendar_selectedButton, .calendar_headerButton {
     text-align:center;
-    width:30px;
+    width:40px;
     height:30px;
 }
 
