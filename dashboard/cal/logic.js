@@ -82,6 +82,26 @@ function calendar_refresh(id) {
             switchWeekFunc()
         }
     }
+
+    document.getElementById('appointments_' + id).innerHTML = ''
+
+    // TODO place in functions
+    var r = new XMLHttpRequest()
+    r.open('GET', 'cal/entry.php?id=' + id + '&eid=' + 0, false)
+    r.send()
+    document.getElementById('appointments_' + id).innerHTML += r.responseText
+    var r = new XMLHttpRequest()
+    r.open('GET', 'cal/entry.php?id=' + id + '&eid=' + 1, false)
+    r.send()
+    document.getElementById('appointments_' + id).innerHTML += r.responseText
+}
+
+function calendar_enableExpires(cid) {
+    if(document.getElementById('enableExpires_' + cid).checked) {
+        document.getElementById('expires_' + cid).disabled = false
+    } else {
+        document.getElementById('expires_' + cid).disabled = true
+    }
 }
 
 function nextMonth(e) {
