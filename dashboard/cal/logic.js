@@ -56,11 +56,9 @@ function calendar_refresh(id) {
         var td = document.getElementById('w0d' + i + '_' + id)
         td.className = "calendar_otherMonthButton"
         var otherDate = new Date(d)
-        otherDate = new Date(otherDate.getTime() - (d.getDay() - i) * (1000 * 60 * 60 * 24))
-        while(otherDate.getHours() != 0) {
-            otherDate = new Date(otherDate.getTime() - (1000 * 60 * 60))
-        }
-        td.innerHTML = otherDate.getDate() + 1
+        otherDate = new Date(d)
+        otherDate.setDate(d.getDate() - d.getDay() + i)
+        td.innerHTML = otherDate.getDate()
         td.onclick = null
     }
     while(d.getMonth() == model[id].month) {
@@ -69,10 +67,7 @@ function calendar_refresh(id) {
         td.innerHTML = d.getDate()
         td.name = id + '%|' + d
         td.onclick = calendar_select
-        d = new Date(d.getTime() + (1000 * 60 * 60 * 24))
-        while(d.getHours() != 0) {
-            d = new Date(d.getTime() + (1000 * 60 * 60))
-        }
+        d.setDate(d.getDate() + 1)
         if(d.getDay() == 0) {
             switchWeekFunc()
         }
@@ -81,10 +76,7 @@ function calendar_refresh(id) {
         var td = document.getElementById('w' + week + 'd' + d.getDay() + '_' + id)
         td.className = 'calendar_otherMonthButton'
         td.innerHTML = d.getDate()
-        d = new Date(d.getTime() + (1000 * 60 * 60 * 24))
-        while(d.getHours() != 0) {
-            d = new Date(d.getTime() + (1000 * 60 * 60))
-        }
+        d.setDate(d.getDate() + 1)
         if(d.getDay() == 0) {
             debug_writeln(week)
             switchWeekFunc()
