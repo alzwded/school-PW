@@ -103,5 +103,48 @@ function calendar_refresh(id) {
     }
 }
 
+function nextMonth(e, id) {
+    if(!(id instanceof String)) {
+        id = id.id
+    }
+    if(model[id].month < 11) {
+        model[id].month++
+    } else {
+        model[id].month = 0
+        model[id].year++
+    }
+    calendar_refresh(id)
+}
+
+function prevMonth(e, id) {
+    if(!(id instanceof String)) {
+        id = id.id
+    }
+    if(model[id].month > 0) {
+        model[id].month--
+    } else {
+        model[id].month = 11
+        model[id].year--
+    }
+    calendar_refresh(id)
+}
+
+function nextYear(e, id) {
+    if(!(id instanceof String)) {
+        id = id.id
+    }
+    model[id].year++
+    calendar_refresh(id)
+}
+
+function prevYear(e, id) {
+    if(!(id instanceof String)) {
+        id = id.id
+    }
+    model[id].year--
+    calendar_refresh(id)
+}
+
 function calendar_clean(id) {
+    delete model[id]
 }
