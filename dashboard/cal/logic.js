@@ -142,6 +142,11 @@ function prevYear(e) {
     calendar_refresh(id)
 }
 
+function calendar_delete(eid) {
+    // TODO stub
+    alert(eid)
+}
+
 function calendar_clean(id) {
     delete model[id]
 }
