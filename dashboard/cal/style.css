@@ -9,6 +9,7 @@ description: calendar styles
     width:100%;
     color:blue;
     background-color:#CC8;
+    text-align:center;
 }
 
 .calendar_button {
@@ -21,8 +22,8 @@ description: calendar styles
 
 .calendar_thisMonthButton, .calendar_otherMonthButton, .calendar_selectedButton, .calendar_headerButton {
     text-align:center;
-    width:20px;
-    height:20px;
+    width:30px;
+    height:30px;
 }
 
 .calendar_thisMonthButton {
@@ -50,4 +51,15 @@ description: calendar styles
 .calendar_headerButton {
     color:blue;
     background-color:#CC8;
+}
+
+.calendar_apoointments {
+    border: solid 1px blue;
+}
+
+.calendar_appointmentInput {
+}
+
+.calendar_appointmentTextArea {
+    overflow: auto;
 }
