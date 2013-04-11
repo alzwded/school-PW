@@ -141,6 +141,7 @@ function calendar_addEntry(id, entry) {
     r.open('GET', 'cal/entry.php?id=' + id + '&eid=' + entry.id, false)
     r.send()
     if(r.status == 200) {
+        // TODO can't innerHTML a table in IE, fix it
         document.getElementById('appointments_' + id).innerHTML += r.responseText
         var cid = id + ':' + entry.id
         document.getElementById('textarea_' + cid).value = entry.text
