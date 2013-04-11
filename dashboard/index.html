@@ -25,8 +25,13 @@ description: main landing page
 		</ul>
 	</div>
 	<div style="bottom:0px;position:absolute;border: solid 2px black;background-color:#BB4;color:#44E;">
-		<input type="file" name="file_data" id="file_data" /><input type="button" value="Load from file" style="float:right;" onclick="pim_load('file_data')"/><br />
+		<form name="loadFile">
+		<input type="file" name="file_data" id="file_data" /><input type="button" value="Load from file" style="float:right;" onclick="pim_load()"/><br />
+		</form>
 		<input type="button" value="Save to file" style="float:right" onclick="pim_save()"/>
 	</div>
+	<form name="saveAsForm" style="visibility:hidden;" action="saveAs.php" method="post">
+		<input type="text" style="visibility:hidden;" name="data" id="saveAsData" />
+	</form>
 </body>
 </html>

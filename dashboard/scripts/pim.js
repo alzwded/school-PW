@@ -11,19 +11,20 @@ var pim_callbacks = new Array()
 var pim_cacheValid = false
 
 function serialize() {
-	var ret = new String()
-	for(var i = 0 ; i < pim_data.length ; ++i) {
-		var s = new String()
-		var element = pim_data[i]
-		s += element.id + '%|'
-		s += element.date.toUTCString() + '%|'
-		s += element.text.replace('%', '%%') + '%|'
-		if(element.expires != null) {
-			s += element.expires
-		}
-		s += '%\\'
+    pim_purge()
+    var ret = new String()
+    for(var i = 0 ; i < pim_data.length ; ++i) {
+        var s = new String()
+        var element = pim_data[i]
+        s += element.id + '%|'
+        s += element.date.toUTCString() + '%|'
+        s += element.text.replace('%', '%%') + '%|'
+        if(element.expires != null) {
+            s += element.expires
+        }
+        s += '%\\'
         ret += s
-	}
+    }
     return escape(s)
 }
 
@@ -36,17 +37,94 @@ function deserialize(str) {
 		if(fields[3] != null) {
 			expires = new Date(Date.parse(fields[3]))
 		}
-		var entry = new_pimEntryWithId(fields[0], new Date(Date.parse(fields[1])), unescape(fields[2]).replace('%%', '%'), expires)
+		var entry = new_pimEntryWithId(new Number(fields[0]), new Date(Date.parse(fields[1])), unescape(fields[2]).replace('%%', '%'), expires)
 		pim_data.push(entry)
+	}
+	pim_purge()
+}
+
+/* taken from http://stackoverflow.com/questions/1353684/detecting-an-invalid-date-date-instance-in-javascript */
+function isValidDate(d) {
+  if ( Object.prototype.toString.call(d) !== "[object Date]" )
+    return false;
+  return !isNaN(d.getTime());
+}
+
+function pim_isValid(e) {
+	var ret = true
+	if(!(e.id instanceof Number)) {
+		return false
+	}
+	if(!(e.date instanceof Date)) {
+		return false
+	}
+	if(!isValidDate(e.date)) {
+		return false
+	}
+	if(!(e.text instanceof String) && typeof(e.text) != "string") {
+		return false
+	}
+	if(e.expires != null) {
+		if(!(e.expires instanceof Date) || !isValidDate(e.expires)) {
+			return false
+		}
+	}
+	return true
+}
+
+// hack function that purges invalid objects because they are annoying
+//     and corrupt my (de)serialization
+function pim_purge() {
+	for(var i = 0 ; i < pim_data.length ;) {
+		if(pim_isValid(pim_data[i])) {
+			++i
+			continue
+		} else {
+			pim_data.splice(i, 1)
+		}
 	}
 }
 
 function pim_save() {
-	debug_writeln('pim_save not implemented')
+	var theDate = new Date()
+	var data = new String()
+	data += "pim_uniqueId=" + pim_uniqueId
+	data += "&pim_data=" + serialize()
+	document.getElementById('saveAsData').value = data
+	document.saveAsForm.submit()
 }
 
 function pim_load() {
-	debug_writeln('pim_load not implemented')
+        var iframe = document.createElement('iframe')
+        iframe.setAttribute('id', '__upload_iframe')
+        iframe.setAttribute('name', '__upload_iframe')
+        iframe.setAttribute('width', '1')
+        iframe.setAttribute('height', '1')
+        iframe.setAttribute('border', '0')
+        iframe.setAttribute('style', 'width: 1px; height: 1px; border: none;')
+        document.loadFile.parentNode.appendChild(iframe)
+        window.frames['__upload_iframe'].name = '__upload_iframe'
+        IFRAMEID = document.getElementById('__upload_iframe')
+        var handler = function() {
+                IFRAMEID.removeEventListener('load', handler)
+
+                var response = IFRAMEID.contentDocument.body.innerText
+                var fields = response.split('&')
+                pim_uniqueId = new Number(fields[0].substr(fields[0].search('=') + 1))
+                deserialize(fields[1].substr(fields[1].search('=') + 1))
+
+                setTimeout('IFRAMEID.parentElement.removeChild(IFRAMEID)', 250);
+                pim_fireChanged()
+        }
+        IFRAMEID.addEventListener('load', handler)
+
+        var form = document.loadFile
+        form.setAttribute('target', '__upload_iframe')
+        form.setAttribute('action', 'load.php')
+        form.setAttribute('method', 'post')
+        form.setAttribute('enctype', 'multipart/form-data')
+        form.setAttribute('encoding', 'multipart/form-data')
+        form.submit()
 }
 
 function pim_toCookie() {
@@ -105,7 +183,10 @@ function new_pimEntryWithId(id, date, text, expires) {
 	var iid = new Number(id)
 
 	var ret = new Object()
-	ret.id = "" + id
+	if(!(id instanceof Number)) {
+		throw new Error('Invalid Argument Type')
+	}
+	ret.id = id
 	if(!(date instanceof Date)) {
 		throw new Error('Invalid Argument Type')
 	}
@@ -145,7 +226,7 @@ function new_pimEntryWithId(id, date, text, expires) {
 }
 
 function new_pimEntry(date, text, expires) {
-	var ret = new_pimEntryWithId(pim_uniqueId++, date, text, expires)
+	var ret = new_pimEntryWithId(new Number(pim_uniqueId++), date, text, expires)
 	return ret
 }
 
