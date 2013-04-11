@@ -248,6 +248,7 @@ function nextMonth(e) {
         model[id].month = 0
         model[id].year++
     }
+    model[id].selected = null
     calendar_refresh(id)
 }
 
@@ -260,6 +261,7 @@ function prevMonth(e) {
         model[id].month = 11
         model[id].year--
     }
+    model[id].selected = null
     calendar_refresh(id)
 }
 
@@ -267,6 +269,7 @@ function nextYear(e) {
     var src = e.target || e.srcElement
     var id = src.attributes["name"].nodeValue
     model[id].year++
+    model[id].selected = null
     calendar_refresh(id)
 }
 
@@ -274,6 +277,7 @@ function prevYear(e) {
     var src = e.target || e.srcElement
     var id = src.attributes["name"].nodeValue
     model[id].year--
+    model[id].selected = null
     calendar_refresh(id)
 }
 
