@@ -39,7 +39,7 @@ function calendar_select(e) {
 }
 
 /* meta:
-    below code (getWeekNumber and comment) are taken from 
+    the code below (getWeekNumber and comment) was taken from 
     http://stackoverflow.com/questions/6117814/get-week-of-year-in-javascript-like-in-php
 */ 
 /* For a given date, get the ISO week number
