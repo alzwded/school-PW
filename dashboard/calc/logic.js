@@ -92,8 +92,8 @@ function equals(id) {
 	if(ctx[id].lastOp != null) {
 		executeOp(id, ctx[id].lastOp)
 	}
-	clearOnNextInput = true
-	haveComma = false
+	ctx[id].clearOnNextInput = true
+	ctx[id].haveComma = false
 }
 
 function doMath(id, what) {
