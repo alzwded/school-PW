@@ -74,7 +74,6 @@ function getWeekNumber(d) {
 }
 
 function fillWeek(id, w, d) {
-    debug_writeln('TODO fillWeek')
     document.getElementById('week' + w + '_' + id).innerHTML = getWeekNumber(d)[1]
 }
 
