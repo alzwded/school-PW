@@ -97,7 +97,7 @@ echo <<<EOT
     </div></table></td></tr>
     <tr><td>
         <input style="display:block; float:right;" type="button" id="add_$id" onclick="calendar_add(event)" value="Add" />
-        <input style="display:block; float:right;" type="button" id="save_$id" onclick="calendar_clearEverything(event)" value="Save" />
+        <input style="display:block; float:right;" type="button" id="save_$id" onclick="calendar_save(event)" value="Save" />
     </td></tr>
 </table>
 EOT;

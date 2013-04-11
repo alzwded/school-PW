@@ -18,7 +18,7 @@ function serialize() {
 		s += element.id + '%|'
 		s += element.date.toUTCString() + '%|'
 		s += element.text.replace('%', '%%') + '%|'
-		if(element.expires == null) {
+		if(element.expires != null) {
 			s += element.expires
 		}
 		s += '%\\'
@@ -28,18 +28,16 @@ function serialize() {
 }
 
 function deserialize(str) {
-	pim_data = {}
-	pim_uniqueId = 0
+	pim_data = new Array()
 	var a = unescape(str).split('%\\')
 	for(var i = 0 ; i < a.length ; ++i) {
 		var fields = a[i].split('%|')
-		var entry = new Object()
-		entry.id = fields[0]
-		entry.date = new Date(fields[1])
-		entry.text = unescape(fields[2]).replace('%%', '%')
+		var expires = null
 		if(fields[3] != null) {
-			entry.expires = new Date(fields[3])
+			expires = new Date(Date.parse(fields[3]))
 		}
+		var entry = new_pimEntryWithId(fields[0], new Date(Date.parse(fields[1])), unescape(fields[2]).replace('%%', '%'), expires)
+		pim_data.push(entry)
 	}
 }
 
@@ -55,7 +53,7 @@ function pim_toCookie() {
 	var theDate = new Date()
 	var oneYearLater = new Date(theDate.getTime() + 31536000000)
 	document.cookie = "pim_uniqueId=" + pim_uniqueId + ";expires=" + oneYearLater.toUTCString()
-	document.cookie = "pim_data=" + escape(serialize()) + ";expires=" + oneYearLater.toUTCString()
+	document.cookie = "pim_data=" + serialize() + ";expires=" + oneYearLater.toUTCString()
 }
 
 function pim_fromCookie() {
@@ -69,13 +67,17 @@ function pim_fromCookie() {
 			}
 		} else if(fields[0] == 'pim_data') {
 			if(fields[1] != null) {
-				pim_data = deserialize(fields[1])
+				/*pim_data = */
+				deserialize(fields[1])
 			}
 		}
 	}
 }
 
 function pim_getDateId(date) {
+	if(!(date instanceof Date)) {
+		throw new Error('not a date')
+	}
 	var year = new String(date.getFullYear())
 	var month = new String(date.getMonth())
 	var day = new String(date.getDate())
@@ -101,42 +103,39 @@ function pim_rebuildDateCache() {
 
 function new_pimEntryWithId(id, date, text, expires) {
 	var iid = new Number(id)
-	if(pim_uniqueId < iid) {
-		pim_uniqueId = iid + 1
-	}
 
 	var ret = new Object()
 	ret.id = "" + id
 	if(!(date instanceof Date)) {
-		throw new IllegalArgumentException()
+		throw new Error('Invalid Argument Type')
 	}
 	ret.date = date
-	if(!(text instanceof String)) {
-		throw new IllegalArgumentException()
+	if(!(text instanceof String || typeof(text) == 'string')) {
+		throw new Error('Invalid Argument Type')
 	}
 	ret.text = text
 	if(expires != null && (!(expires instanceof Date) || expires < date)) {
-		throw new IllegalArgumentException()
+		throw new Error('Invalid Argument Type')
 	}
 	ret.expires = expires
 
 	ret.setDate = function(d) {
 		if(!(d instanceof Date)) {
-			throw new IllegalArgumentException()
+			throw new Error('Invalid Argument Type')
 		}
 		this.date = d
 		pim_fireChanged()
 	}
 	ret.setText = function(x) {
-		if(!(x instanceof String)) {
-			throw new IllegalArgumentException()
+		if(!(x instanceof String || typeof(x) == 'string')) {
+			throw new Error('Invalid Argument Type')
 		}
 		this.text = x
 		pim_fireChanged()
 	}
 	ret.setExpires = function(d) {
-		if(d != null && (!(d instanceof Date) || d >= this.date)) {
-			throw new IllegalArgumentException()
+		if(d != null && (!(d instanceof Date) || d < this.date)) {
+			throw new Error('Invalid Argument Type')
 		}
 		this.expires = d
 		pim_fireChanged()
@@ -146,7 +145,7 @@ function new_pimEntryWithId(id, date, text, expires) {
 }
 
 function new_pimEntry(date, text, expires) {
-	var ret = new_pimEntryWithId(pim_uniqueId, date, text, expires)
+	var ret = new_pimEntryWithId(pim_uniqueId++, date, text, expires)
 	return ret
 }
 
@@ -155,7 +154,7 @@ function pim_add(date, text, expires) {
 	var e = new_pimEntry(date, text, expires)
 	pim_data.push(e)
 	pim_fireChanged()
-	return e.id
+	return e
 }
 
 function pim_getEntriesForDate(date) {

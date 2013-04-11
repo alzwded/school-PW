@@ -6,7 +6,7 @@ description: calendar styles
 */
 
 .calendar_table {
-    width:100%;
+    min-width:560px;
     color:blue;
     background-color:#CC8;
     text-align:center;

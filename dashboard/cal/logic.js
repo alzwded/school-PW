@@ -34,8 +34,9 @@ function calendar_reset(id) {
 function calendar_select(e) {
     var td = e.target || e.srcElement
     var fields = td.name.split('%|')
-    debug_writeln('TODO calendar_select')
-    alert(fields[0] + ' on ' + fields[1])
+    debug_writeln(fields[0], ' on ', fields[1])
+    model[fields[0]].selected = fields[1]
+    calendar_refresh(fields[0])
 }
 
 /* meta:
@@ -99,7 +100,11 @@ function calendar_refresh(id) {
     }
     while(d.getMonth() == model[id].month) {
         var td = document.getElementById('w' + week + 'd' + d.getDay() + '_' + id)
-        td.className = 'calendar_thisMonthButton'
+        if(d == model[id].selected) {
+            td.className = 'calendar_selectedButton'
+        } else {
+            td.className = 'calendar_thisMonthButton'
+        }
         td.innerHTML = d.getDate()
         td.name = id + '%|' + d
         td.onclick = calendar_select
@@ -123,15 +128,96 @@ function calendar_refresh(id) {
 
     document.getElementById('appointments_' + id).innerHTML = ''
 
-    // TODO place in functions
+    // get entries for selected day
+    if(model[id].selected != null) {
+        var entries = pim_getEntriesForDate(new Date(Date.parse(model[id].selected)))
+        for(var i = 0 ; entries != null && i < entries.length ; ++i) {
+            calendar_addEntry(id, entries[i])
+        }
+    }
+}
+
+function calendar_addEntry(id, entry) {
     var r = new XMLHttpRequest()
-    r.open('GET', 'cal/entry.php?id=' + id + '&eid=' + 0, false)
+    r.open('GET', 'cal/entry.php?id=' + id + '&eid=' + entry.id, false)
     r.send()
-    document.getElementById('appointments_' + id).innerHTML += r.responseText
-    var r = new XMLHttpRequest()
-    r.open('GET', 'cal/entry.php?id=' + id + '&eid=' + 1, false)
-    r.send()
-    document.getElementById('appointments_' + id).innerHTML += r.responseText
+    if(r.status == 200) {
+        document.getElementById('appointments_' + id).innerHTML += r.responseText
+        var cid = id + ':' + entry.id
+        document.getElementById('textarea_' + cid).value = entry.text
+        if(entry.expires != null) {
+            var enableExpires = document.getElementById('enableExpires_' + cid)
+            var onch = enableExpires.onchange
+            enableExpires.onchange = null
+            enableExpires.checked = true
+            var expires = document.getElementById('expires_' + cid)
+            expires.disabled = false
+            expires.valueAsDate = entry.expires
+            enableExpires.onchange = onch
+        }
+    }
+}
+
+function calendar_save(e) {
+    var src = e.target || e.srcElement
+    var id = src.id.substr(5)
+    if(model[id].selected == null) {
+        return
+    }
+    var entries = pim_getEntriesForDate(new Date(Date.parse(model[id].selected)))
+    var table = document.getElementById('appointments_' + id)
+    for(var i = 0 ; i < table.rows.length ; ++i) {
+        var cell = table.rows[i].cells[0]
+        var children = cell.childNodes
+        var cid = null
+        var expires = null
+        var text = null
+        for(var i = 0 ; i < children.length ; ++i) {
+            var child = children[i]
+            if(child.attributes == null || child.attributes.name == null) {
+                continue
+            }
+            if(child.attributes.name.nodeValue == 'expires') {
+                if(cid == null) {
+                    cid = child.id.substr(8)
+                }
+                if(document.getElementById('enableExpires_' + cid).checked) {
+                    expires = new Date(Date.parse(child.value))
+                }
+            } else if(child.attributes.name.nodeValue == 'text') {
+                if(cid == null) {
+                    cid = child.id.substr(9)
+                }
+                text = child.value
+            }
+        }
+        var eid = cid.substr(cid.search(':') + 1)
+        var found = null
+        for(var i = 0 ; i < entries.length ; ++i) {
+            if(entries[i].id == eid) {
+                found = entries[i]
+                break
+            }
+        }
+        if(found != null) {
+            if(found.expires != expires) {
+                found.setExpires(expires)
+            }
+            if(found.text != text) {
+                found.setText(text)
+            }
+        }
+    }
+}
+
+function calendar_add(e) {
+    var src = e.target || e.srcElement
+    var id = src.id.substr(4)
+    if(model[id].selected == null) {
+        alert('no date selected')
+        return
+    }
+    var entry = pim_add(new Date(Date.parse(model[id].selected)), '', null)
 }
 
 function calendar_enableExpires(cid) {
@@ -139,6 +225,18 @@ function calendar_enableExpires(cid) {
         document.getElementById('expires_' + cid).disabled = false
     } else {
         document.getElementById('expires_' + cid).disabled = true
+    }
+}
+
+function calendar_clearEverything(e) {
+    if(model[id].selected == null) {
+        return
+    }
+    var src = e.target || e.srcElement
+    var id = src.id.substr(5)
+    var entries = pim_getEntriesForDate(model[id].selected)
+    for(var i = 0 ; i < entries.length ; ++i) {
+        pim_delete(entries[i].id)
     }
 }
 
@@ -181,10 +279,10 @@ function prevYear(e) {
 }
 
 function calendar_delete(eid) {
-    // TODO stub
-    alert(eid)
+    pim_delete(eid)
 }
 
 function calendar_clean(id) {
+    pim_unregisterChangeCallback(model[id].callback)
     delete model[id]
 }
