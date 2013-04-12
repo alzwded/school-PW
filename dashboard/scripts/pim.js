@@ -34,8 +34,11 @@ function deserialize(str) {
 	for(var i = 0 ; i < a.length ; ++i) {
 		var fields = a[i].split('%|')
 		var expires = null
-		if(fields[3] != null) {
+		if(fields[3] != null && fields[3] != '') {
 			expires = new Date(Date.parse(fields[3]))
+		}
+		if(!isValidDate(expires)) {
+			expires = null
 		}
 		var entry = new_pimEntryWithId(new Number(fields[0]), new Date(Date.parse(fields[1])), unescape(fields[2]).replace('%%', '%'), expires)
 		pim_data.push(entry)
