@@ -198,7 +198,7 @@ function new_pimEntryWithId(id, date, text, expires) {
 		throw new Error('Invalid Argument Type')
 	}
 	ret.text = text
-	if(expires != null && (!(expires instanceof Date) || expires < date)) {
+	if(expires != null && (!(expires instanceof Date) || !isValidDate(expires) || expires < date)) {
 		throw new Error('Invalid Argument Type')
 	}
 	ret.expires = expires
