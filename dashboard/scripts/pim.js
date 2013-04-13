@@ -32,6 +32,9 @@ function deserialize(str) {
 	pim_data = new Array()
 	var a = unescape(str).split('%\\')
 	for(var i = 0 ; i < a.length ; ++i) {
+                if(a == '') {
+                        continue
+                }
 		var fields = a[i].split('%|')
 		var expires = null
 		if(fields[3] != null && fields[3] != '') {
