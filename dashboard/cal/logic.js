@@ -158,7 +158,11 @@ function calendar_addEntryData(id, entry) {
         enableExpires.checked = true
         var expires = document.getElementById('expires_' + cid)
         expires.disabled = false
-        expires.valueAsDate = entry.expires
+        if(expires.type == "date") {
+            expires.valueAsDate = entry.expires
+        } else {
+            expires.value = entry.expires.toLocaleDateString()
+        }
         enableExpires.onchange = onch
     }
 }
@@ -182,8 +186,9 @@ function calendar_save(e) {
     }
     var entries = pim_getEntriesForDate(new Date(Date.parse(model[id].selected)))
     var table = document.getElementById('appointments_' + id)
-    for(var i = 0 ; i < table.rows.length ; ++i) {
-        var cell = table.rows[i].cells[0]
+    var tableRows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr')
+    for(var i = 0 ; i < tableRows.length ; ++i) {
+        var cell = tableRows[i].cells[0]
         var children = cell.childNodes
         var cid = null
         var expires = null
