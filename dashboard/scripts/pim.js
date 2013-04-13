@@ -47,6 +47,7 @@ function deserialize(str) {
 		pim_data.push(entry)
 	}
 	pim_purge()
+        pim_data.sort(pim_comparator)
 }
 
 /* taken from http://stackoverflow.com/questions/1353684/detecting-an-invalid-date-date-instance-in-javascript */
@@ -249,10 +250,19 @@ function new_pimEntry(date, text, expires) {
 	return ret
 }
 
+function pim_comparator(a, b) {
+        if(a.date.valueOf() == b.date.valueOf()) {
+                return a.date.valueOf() - b.date.valueOf()
+        } else {
+                return a.date.valueOf() - b.date.valueOf()
+        }
+}
+
 /* returns: id */
 function pim_add(date, text, expires) {
 	var e = new_pimEntry(date, text, expires)
 	pim_data.push(e)
+        pim_data.sort(pim_comparator)
 	pim_fireChanged()
 	return e
 }
