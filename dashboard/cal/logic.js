@@ -130,31 +130,39 @@ function calendar_refresh(id) {
     // get entries for selected day
     if(model[id].selected != null) {
         var entries = pim_getEntriesForDate(new Date(Date.parse(model[id].selected)))
+        // two pass because the data in the table is cleared when
+        //     setting innerHTML
         for(var i = 0 ; entries != null && i < entries.length ; ++i) {
-            calendar_addEntry(id, entries[i])
+            calendar_addEntryTemplate(id, entries[i])
+        }
+        for(var i = 0 ; entries != null && i < entries.length ; ++i) {
+            calendar_addEntryData(id, entries[i])
         }
     }
 }
 
-function calendar_addEntry(id, entry) {
+function calendar_addEntryData(id, entry) {
+    var cid = id + ':' + entry.id
+    document.getElementById('textarea_' + cid).value = entry.text
+    if(entry.expires != null) {
+        var enableExpires = document.getElementById('enableExpires_' + cid)
+        var onch = enableExpires.onchange
+        enableExpires.onchange = null
+        enableExpires.checked = true
+        var expires = document.getElementById('expires_' + cid)
+        expires.disabled = false
+        expires.valueAsDate = entry.expires
+        enableExpires.onchange = onch
+    }
+}
+
+function calendar_addEntryTemplate(id, entry) {
     var r = new XMLHttpRequest()
     r.open('GET', 'cal/entry.php?id=' + id + '&eid=' + entry.id, false)
     r.send()
     if(r.status == 200) {
         // TODO can't innerHTML a table in IE, fix it
         document.getElementById('appointments_' + id).innerHTML += r.responseText
-        var cid = id + ':' + entry.id
-        document.getElementById('textarea_' + cid).value = entry.text
-        if(entry.expires != null) {
-            var enableExpires = document.getElementById('enableExpires_' + cid)
-            var onch = enableExpires.onchange
-            enableExpires.onchange = null
-            enableExpires.checked = true
-            var expires = document.getElementById('expires_' + cid)
-            expires.disabled = false
-            expires.valueAsDate = entry.expires
-            enableExpires.onchange = onch
-        }
     }
 }
 
@@ -200,14 +208,15 @@ function calendar_save(e) {
             }
         }
         if(found != null) {
-            if(found.expires != expires) {
-                found.setExpires(expires)
-            }
-            if(found.text != text) {
-                found.setText(text)
-            }
+            // don't use getter and setter because we might change
+            //     more than one thing (sigh)
+            found.expires = expires
+            found.text = text
+            // TODO maybe in the future change the thing via the
+            //     onchange event on the individual elements
         }
     }
+    pim_fireChanged()
 }
 
 function calendar_add(e) {

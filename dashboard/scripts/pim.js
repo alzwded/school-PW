@@ -25,7 +25,7 @@ function serialize() {
         s += '%\\'
         ret += s
     }
-    return escape(s)
+    return escape(ret)
 }
 
 function deserialize(str) {
@@ -197,7 +197,7 @@ function new_pimEntryWithId(id, date, text, expires) {
 	if(!(text instanceof String || typeof(text) == 'string')) {
 		throw new Error('Invalid Argument Type')
 	}
-	ret.text = text
+	ret.text = new String(text)
 	if(expires != null && (!(expires instanceof Date) || !isValidDate(expires))) {
 		throw new Error('Invalid Argument Type')
 	}
@@ -207,6 +207,9 @@ function new_pimEntryWithId(id, date, text, expires) {
 		if(!(d instanceof Date)) {
 			throw new Error('Invalid Argument Type')
 		}
+                if(d.getTime() == this.date.getTime()) {
+                        return
+                }
 		this.date = d
 		pim_fireChanged()
 	}
@@ -214,13 +217,23 @@ function new_pimEntryWithId(id, date, text, expires) {
 		if(!(x instanceof String || typeof(x) == 'string')) {
 			throw new Error('Invalid Argument Type')
 		}
-		this.text = x
+                var other = new String(x)
+                if(this.text.valueOf() == x.valueOf()) {
+                        return
+                }
+		this.text = new String(x)
 		pim_fireChanged()
 	}
 	ret.setExpires = function(d) {
 		if(d != null && (!(d instanceof Date))) {
 			throw new Error('Invalid Argument Type')
 		}
+                if(d == null && this.expires == null) {
+                        return
+                }
+                if(d != null && this.expires != null && d.getTime() == this.expires.getTime()) {
+                        return
+                }
 		this.expires = d
 		pim_fireChanged()
 	}
