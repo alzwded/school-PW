@@ -132,11 +132,16 @@ function calendar_refresh(id) {
     // get entries for selected day
     if(model[id].selected != null) {
         var entries = pim_getEntriesForDate(new Date(Date.parse(model[id].selected)))
+
+        var htmlForTable = '<table>'
         // two pass because the data in the table is cleared when
         //     setting innerHTML
         for(var i = 0 ; entries != null && i < entries.length ; ++i) {
-            calendar_addEntryTemplate(id, entries[i])
+            htmlForTable += calendar_addEntryTemplate(id, entries[i])
         }
+        htmlForTable += '</table>'
+        document.getElementById('appointments_' + id).innerHTML += htmlForTable
+
         for(var i = 0 ; entries != null && i < entries.length ; ++i) {
             calendar_addEntryData(id, entries[i])
         }
@@ -163,8 +168,9 @@ function calendar_addEntryTemplate(id, entry) {
     r.open('GET', 'cal/entry.php?id=' + id + '&eid=' + entry.id, false)
     r.send()
     if(r.status == 200) {
-        // TODO can't innerHTML a table in IE, fix it
-        document.getElementById('appointments_' + id).innerHTML += r.responseText
+        // can't innerHTML on table on ie9
+        //document.getElementById('appointments_' + id).innerHTML += r.responseText
+        return r.responseText
     }
 }
 

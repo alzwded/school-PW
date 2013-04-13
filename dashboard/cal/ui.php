@@ -93,8 +93,9 @@ echo <<<EOT
             <td class="calendar_otherMonthButton" id="w5d6_$id"></td>
         </tr>
     </table></td></tr>
-    <tr><td><div style="height:100px; overflow: scroll;"><table id="appointments_$id" class="calendar_appointments">
-    </div></table></td></tr>
+    <tr><td><div style="height:100px; overflow: scroll;">
+        <div id="appointments_$id" class="calendar_appointments" />
+    </div></td></tr>
     <tr><td>
         <input style="display:block; float:right;" type="button" id="add_$id" onclick="calendar_add(event)" value="Add" />
         <input style="display:block; float:right;" type="button" id="save_$id" onclick="calendar_save(event)" value="Save" />
