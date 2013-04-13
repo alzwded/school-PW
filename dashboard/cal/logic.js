@@ -101,6 +101,8 @@ function calendar_refresh(id) {
         var td = document.getElementById('w' + week + 'd' + d.getDay() + '_' + id)
         if(d == model[id].selected) {
             td.className = 'calendar_selectedButton'
+        } else if(pim_getEntriesForDate(d) != null) {
+            td.className = 'calendar_thisMonthButtonWithStuff'
         } else {
             td.className = 'calendar_thisMonthButton'
         }
