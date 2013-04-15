@@ -133,48 +133,7 @@ function calendar_refresh(id) {
     if(model[id].selected != null) {
         var entries = pim_getEntriesForDate(new Date(Date.parse(model[id].selected)))
 
-        var htmlForTable = '<table>'
-        // two pass because the data in the table is cleared when
-        //     setting innerHTML
-        for(var i = 0 ; entries != null && i < entries.length ; ++i) {
-            htmlForTable += calendar_addEntryTemplate(id, entries[i])
-        }
-        htmlForTable += '</table>'
-        document.getElementById('appointments_' + id).innerHTML += htmlForTable
-
-        for(var i = 0 ; entries != null && i < entries.length ; ++i) {
-            calendar_addEntryData(id, entries[i])
-        }
-    }
-}
-
-function calendar_addEntryData(id, entry) {
-    var cid = id + ':' + entry.id
-    document.getElementById('textarea_' + cid).value = entry.text
-    if(entry.expires != null) {
-        var enableExpires = document.getElementById('enableExpires_' + cid)
-        var onch = enableExpires.onchange
-        enableExpires.onchange = null
-        enableExpires.checked = true
-        var expires = document.getElementById('expires_' + cid)
-        expires.disabled = false
-        if(expires.type == "date") {
-            expires.valueAsDate = entry.expires
-        } else {
-            expires.value = entry.expires.toLocaleDateString()
-        }
-        enableExpires.onchange = onch
-    }
-}
-
-function calendar_addEntryTemplate(id, entry) {
-    var r = new XMLHttpRequest()
-    r.open('GET', 'cal/entry.php?id=' + id + '&eid=' + entry.id, false)
-    r.send()
-    if(r.status == 200) {
-        // can't innerHTML on table on ie9
-        //document.getElementById('appointments_' + id).innerHTML += r.responseText
-        return r.responseText
+        common_populateWithEntries(id, entries)
     }
 }
 

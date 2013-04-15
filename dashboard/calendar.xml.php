@@ -12,6 +12,9 @@ echo <<<EOT
 <app>
 	<css>cal/style.css</css>
 	<script>
+		<path>cal/common.js</path>
+	</script>
+	<script>
 		<path>cal/logic.js</path>
 		<onload>calendar_reset('$id')</onload>
 		<unload>calendar_clean('$id')</unload>
