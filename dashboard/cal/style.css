@@ -77,6 +77,13 @@ description: calendar styles
 .calendar_appointmentInput {
 }
 
+.calendar_appointments {
+    height:100px;
+    min-height:100px;
+    overflow:scroll;
+    border: solid 1px blue;
+}
+
 .calendar_appointmentTextArea {
     overflow: auto;
     color: blue;
