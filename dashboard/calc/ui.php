@@ -61,5 +61,5 @@ echo <<<EOT
 		</tr></td></table></td>
 	</tr>
 </table>
-<br /><br /><input type="button" value="Panic button" title="Fully reset state" onclick="reset('$id')" />
+<!--<br /><br /><input type="button" value="Panic button" title="Fully reset state" onclick="reset('$id')" />-->
 EOT;
