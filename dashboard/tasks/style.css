@@ -1,0 +1,24 @@
+/*
+file: style.css
+author: Vlad Mesco
+date: 15/04/2013 16:28
+description: Stylesheet for task lister
+*/
+
+.tasks_appointments {
+	border:solid 1px blue;
+	height:400px;
+	overflow:scroll;
+}
+
+.tasks_footer {
+	display:block;
+	float:bottom;
+	background-color:#CCB;
+	color:blue;
+}
+
+.tasks_table {
+	color:blue;
+	background-color:#CC8;
+}

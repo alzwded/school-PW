@@ -123,7 +123,7 @@ function new_widget(what, title) {
     if(document.body.clientWidth / 2 > 100) {
         loffset = 100
     }
-	widget.style.left = new String(Math.random() * document.body.clientWidth / 2 + loffset) + "px"
+	widget.style.left = new String(Math.random() * document.body.clientWidth / 4 + loffset) + "px"
 	widget.style.top = new String(Math.random() * document.body.clientHeight / 2) + "px"
 	widget.className += " widget"
 	widget.onclick = raiseMeCb

@@ -252,6 +252,13 @@ function new_pimEntry(date, text, expires) {
 
 function pim_comparator(a, b) {
         if(a.date.valueOf() == b.date.valueOf()) {
+                if(a.expires != null && b.expires != null) {
+                        return a.expires.valueOf() - b.expires.valueOf()
+                } else if(a.expires != null) {
+                        return -1
+                } else {
+                        return 1
+                }
                 return a.date.valueOf() - b.date.valueOf()
         } else {
                 return a.date.valueOf() - b.date.valueOf()
@@ -286,6 +293,7 @@ function pim_delete(id) {
 
 function pim_fireChanged() {
 	pim_cacheValid = false
+        pim_data.sort(pim_comparator)
 	for(var i = 0 ; i < pim_callbacks.length ; ++i) {
 		pim_callbacks[i]()
 	}

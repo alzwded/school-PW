@@ -107,7 +107,7 @@ function calendar_refresh(id) {
             td.className = 'calendar_thisMonthButton'
         }
         td.innerHTML = d.getDate()
-        td.name = id + '%|' + d
+        td.name = id + '%|' + d.toString()
         td.onclick = calendar_select
         aWeekDayDate = d
         d.setDate(d.getDate() + 1)
@@ -133,7 +133,7 @@ function calendar_refresh(id) {
     if(model[id].selected != null) {
         var entries = pim_getEntriesForDate(new Date(Date.parse(model[id].selected)))
 
-        common_populateWithEntries(id, entries)
+        common_populateWithEntries(id, entries, false)
     }
 }
 
@@ -152,6 +152,7 @@ function calendar_save(e) {
         var cid = null
         var expires = null
         var text = null
+        var date = null
         for(var i = 0 ; i < children.length ; ++i) {
             var child = children[i]
             if(child.attributes == null || child.attributes.name == null) {
@@ -169,6 +170,11 @@ function calendar_save(e) {
                     cid = child.id.substr(9)
                 }
                 text = child.value
+            } else if(child.attributes.name.nodeValue == 'date') {
+                if(cid == null) {
+                    cid = child.id.substr(6)
+                }
+                date = new Date(Date.parse(child.value))
             }
         }
         var eid = cid.substr(cid.search(':') + 1)
@@ -182,6 +188,9 @@ function calendar_save(e) {
         if(found != null) {
             // don't use getter and setter because we might change
             //     more than one thing (sigh)
+            if(date != null) {
+                found.date = date
+            }
             found.expires = expires
             found.text = text
             // TODO maybe in the future change the thing via the
