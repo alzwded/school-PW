@@ -3,6 +3,10 @@
 // date: 15/04/2013 16:17
 // description: calendar/tasks common functions
 
+function common_delete(eid) {
+    pim_delete(eid)
+}
+
 function getDateyString(d) {
     var day = new String(d.getDate())
     if(day.length < 2) {

@@ -11,7 +11,7 @@ $cid = $id.":".$eid;
 header('Content-Type: text/html');
 echo <<<EOT
 <tr><td class="calendar_appointmentContainer">
-    <input type="button" value="x" title="delete (no prompt)" onclick="calendar_delete($eid)" />
+    <input type="button" value="x" title="delete (no prompt)" onclick="common_delete($eid)" />
 EOT;
 if(isset($_GET["pd"])) {
     $pd = $_GET["pd"];

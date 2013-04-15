@@ -5,6 +5,12 @@
 
 var taskModel = {}
 
+function tasks_add(e) {
+	var d = new Date()
+	var today = new Date(d.getFullYear(), d.getMonth(), d.getDate())
+	pim_add(today, '', null)
+}
+
 function tasks_save(e) {
     var src = e.target || e.srcElement
     var id = src.id.substr(5)

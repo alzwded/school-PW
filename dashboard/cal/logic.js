@@ -272,10 +272,6 @@ function prevYear(e) {
     calendar_refresh(id)
 }
 
-function calendar_delete(eid) {
-    pim_delete(eid)
-}
-
 function calendar_clean(id) {
     pim_unregisterChangeCallback(model[id].callback)
     delete model[id]

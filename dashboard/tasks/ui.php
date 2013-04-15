@@ -12,6 +12,7 @@ echo <<<EOT
 	<div id="appointments_$id" class="tasks_appointments" />
 </td></tr>	
 <tr><td>
+	<input id="add_$id" type="button" style="display:block; float:right;" onclick="tasks_add(event)" value="Add" />
 	<input id="save_$id" type="button" style="display:block; float:right;" onclick="tasks_save(event)" value="Save" />
 </td></tr><table>
 EOT;
